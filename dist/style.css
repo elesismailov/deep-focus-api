@@ -38,7 +38,7 @@ body {
   width: 100%;
 }
 
-.main-cont #stopButton {
+.main-cont #stopButton, .main-cont #breakButton {
   display: none;
 }
 

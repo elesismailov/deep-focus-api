@@ -1,0 +1,14 @@
+{
+    "timeData":{
+        "uWTime": 1500,
+        "uBTime": 300,
+        "uLBTime": 900,
+        "totalFocusTime": null
+    },
+    "trackData":{
+        "2021-08-08":{
+            "donePomodoros": null,
+            "totalFocusTime": null
+        }
+    }
+}

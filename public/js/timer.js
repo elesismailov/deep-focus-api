@@ -61,7 +61,7 @@ function pauseTimer(){
     clearInterval(mainTimer)
     pauseBt.removeEventListener('click', pauseTimer);
     pauseBt.addEventListener('click', playTimer);
-    pauseBt.childNodes[0].src = "static/images/timer-start-big.png";
+    pauseBt.childNodes[0].src = "./images/timer-start-big.png";
     stopBt.style.display = 'inline';
 };
 function playTimer(){
@@ -69,7 +69,7 @@ function playTimer(){
     pauseBt.removeEventListener('click', playTimer);
     pauseBt.addEventListener('click', pauseTimer);
     
-    pauseBt.childNodes[0].src = "static/images/timer-pause-big.png";
+    pauseBt.childNodes[0].src = "./images/timer-pause-big.png";
     stopBt.style.display = 'none';
 };
 function stopTimer(){
@@ -92,10 +92,10 @@ function clearBreak(){
 function donePomodoro(set){
     let pomodoroIcons = document.querySelectorAll(".done-cont .pomodoro img");
     if (set == 1){
-        pomodoroIcons[setsNum].src = "static/images/pomodoro-done.png";
+        pomodoroIcons[setsNum].src = "./images/pomodoro-done.png";
     } else if (set == 0){
         for (let icon of pomodoroIcons){
-            icon.src = "static/images/pomodoro-unfinished.png";
+            icon.src = "./images/pomodoro-unfinished.png";
         }
     }
     

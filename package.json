@@ -1,0 +1,16 @@
+{
+  "name": "deep-focus",
+  "version": "1.0.0",
+  "description": "An App to help you focus",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "start",
+    "dev": "nodemon index.js"
+  },
+  "author": "Eles Ismailov",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}

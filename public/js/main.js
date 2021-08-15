@@ -1,19 +1,4 @@
 
-// var requestURL = "./data.json";
-// const request = new XMLHttpRequest();
-// request.open('GET', requestURL);
-// request.responseType = "json";
-// request.send();
-
-// request.addEventListener("load", function(){
-//     console.log(request.response.timeData)
-//     console.log(request.response.timeData)
-//     console.log(request.response.trackData)
-//     console.log(request.response.timeData)
-//     console.log(request.response.timeData)
-// })
-
-
 let userWorkTime = 1500,
 userBreakTime = 300,
 userLongBreakTime = 900;
@@ -34,17 +19,28 @@ function saveData(){
     timeData.uBTime = userBreakTime;
     timeData.uLBTime = userLongBreakTime;
     localStorage.setItem("timeData", JSON.stringify(timeData))
+
+    let postT = new XMLHttpRequest();
+    postT.open('POST', "/saveTimeData");
+    postT.setRequestHeader("Content-Type", "application/json");
+    // postT.send(JSON.stringify(timeData));
 }
 function restoreData(){
-    changeTime()
     let restoredTimeData = JSON.parse(localStorage.getItem("timeData"));
     document.querySelector("#time").innerHTML = `${("0" + Math.floor(workTimer.time%86400%3600/60)).slice(-2)}:${("0" + workTimer.time%86400%3600%60).slice(-2)}`;
     document.querySelector("#pomodoroTime").value = restoredTimeData.uWTime/60;
     document.querySelector("#breakTime").value = restoredTimeData.uBTime/60;
     document.querySelector("#longBreakTime").value = restoredTimeData.uLBTime/60;
     changeTime()
+
+    let postT = new XMLHttpRequest();
+    postT.open('GET', "/restoreTimeData");
+    // postT.setRequestHeader("Content-Type", "application/json");
+    postT.send();
 }
 // new Date().toJSON().slice(0,10)
+
+
 
 let settingsCont = document.getElementById("settingsCont"),
     settingsContent = document.querySelector(".settings-content"),
@@ -53,6 +49,7 @@ let settingsCont = document.getElementById("settingsCont"),
 
 settingsIcon.onclick = function() {
     settingsCont.style.display = "block";
+
 } 
 closeSettings.onclick = function() {
     settingsCont.style.animationName = "fadeOut";

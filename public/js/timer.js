@@ -5,7 +5,8 @@ let pauseBt = document.querySelector("#pauseButton"),
     breakBt = document.querySelector("#breakButton");
 
 let mainTimer,
-    setsNum = 0;
+    setsNum = 0,
+    thisSessionTime = 0,
     nowGoing = "tobreak";
 
 let workTimer = {
@@ -21,11 +22,14 @@ function resetValues(){
     workTimer.time = userWorkTime;
     breakTimer.time = userBreakTime;
     longBreakTimer.time = userLongBreakTime;
+    thisSessionTime = 0;
 };
 function setTimer(timer){
     document.querySelector("#time").innerHTML = `${("0" + Math.floor(timer.time%86400%3600/60)).slice(-2)}:${("0" + timer.time%86400%3600%60).slice(-2)}`;
-    timer.time -=1;
+    timer.time --;
+    thisSessionTime ++
     if (timer.time < 0){
+        saveSessionData();
         resetValues();
         clearInterval(mainTimer)
         if (nowGoing == "towork"){
@@ -33,19 +37,22 @@ function setTimer(timer){
             nowGoing = "tobreak";
             breakBt.style.display = "none";
             pauseBt.style.display = "inline";
-            document.querySelector(".main-cont").style.opacity = "1";
+            // document.querySelector(".main-cont").style.opacity = "1";
+            document.body.style.backgroundColor = "#514edf"
         } else {
             donePomodoro(1);
             setsNum ++;
             nowGoing = "towork";
             breakBt.style.display = "inline";
             pauseBt.style.display = "none";
-            document.querySelector(".main-cont").style.opacity = "0.7";
+            // document.querySelector(".main-cont").style.opacity = "0.7";
+            document.body.style.backgroundColor = "#7607d1";
             if (setsNum >= 3){
                 donePomodoro(0);
                 setsNum = 0;
                 mainTimer = setInterval(setTimer, 1000, longBreakTimer);
-                document.querySelector(".main-cont").style.opacity = "0.4";
+                // document.querySelector(".main-cont").style.opacity = "0.4";
+                document.body.style.backgroundColor = "#00ffdb";
             } else {
                 mainTimer = setInterval(setTimer, 1000, breakTimer)
             }
@@ -61,7 +68,7 @@ function pauseTimer(){
     clearInterval(mainTimer)
     pauseBt.removeEventListener('click', pauseTimer);
     pauseBt.addEventListener('click', playTimer);
-    pauseBt.childNodes[0].src = "./images/timer-start-big.png";
+    pauseBt.childNodes[0].src = "../images/timer-start-big.png";
     stopBt.style.display = 'inline';
 };
 function playTimer(){
@@ -69,15 +76,23 @@ function playTimer(){
     pauseBt.removeEventListener('click', playTimer);
     pauseBt.addEventListener('click', pauseTimer);
     
-    pauseBt.childNodes[0].src = "./images/timer-pause-big.png";
+    pauseBt.childNodes[0].src = "../images/timer-pause-big.png";
     stopBt.style.display = 'none';
 };
 function stopTimer(){
     clearInterval(mainTimer);
+    saveSessionData()
     resetValues();
 
     document.querySelector("#time").innerHTML = `${("0" + Math.floor(workTimer.time%86400%3600/60)).slice(-2)}:${("0" + workTimer.time%86400%3600%60).slice(-2)}`;
+    document.body.style.backgroundColor = "#514edf"
     stopBt.style.display = 'none';
+    breakBt.style.display = "none";
+    pauseBt.style.display = "inline";
+    pauseBt.removeEventListener('click', pauseTimer);
+    pauseBt.addEventListener('click', playTimer);
+    pauseBt.childNodes[0].src = "../images/timer-start-big.png";
+
 };
 function clearBreak(){
     clearInterval(mainTimer);
@@ -86,18 +101,21 @@ function clearBreak(){
     document.querySelector("#time").innerHTML = `${("0" + Math.floor(workTimer.time%86400%3600/60)).slice(-2)}:${("0" + (workTimer.time+1)%86400%3600%60).slice(-2)}`;
     breakBt.style.display = "none";
     pauseBt.style.display = "inline";
-    document.querySelector(".main-cont").style.opacity = "1";
+    // document.querySelector(".main-cont").style.opacity = "1";
+    document.body.style.backgroundColor = "#514edf"
+
 };
 
 function donePomodoro(set){
-    let pomodoroIcons = document.querySelectorAll(".done-cont .pomodoro img");
-    if (set == 1){
-        pomodoroIcons[setsNum].src = "./images/pomodoro-done.png";
-    } else if (set == 0){
-        for (let icon of pomodoroIcons){
-            icon.src = "./images/pomodoro-unfinished.png";
-        }
-    }
-    
+    // let pomodoroIcons = document.querySelectorAll(".done-cont .pomodoro img");
+    // if (set == 1){
+    //     pomodoroIcons[setsNum].src = "../images/pomodoro-done.png";
+    // } else if (set == 0){
+    //     for (let icon of pomodoroIcons){
+    //         icon.src = "../images/pomodoro-unfinished.png";
+    //     }
+    // }
 }
-document.body.onload = setTimeout(restoreData, 100);
+
+
+restoreData()

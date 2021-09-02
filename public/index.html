@@ -4,54 +4,62 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Deep Focus</title>
+    <link rel="shortcut icon" href="./icon/icon.png" type="image/x-icon">
+    <script defer src="../js/main.js"></script>
+    <script defer src="../js/timer.js"></script>
 </head>
 <body>
-    <header class="header">
-
-    </header>
     <div class="main-cont">
         <p id="time">00:00</p>
-        <button  id="pauseButton"><img src="./images/timer-start-big.png" alt=""></button>
-        <button  id="stopButton"><img src="./images/timer-stop-big.png" alt=""></button>
-        <button  id="breakButton"><img src="./images/timer-complete-big.png" alt=""></button>
+        <button  id="pauseButton"><img src="../images/timer-start-big.png" alt=""></button>
+        <button  id="stopButton"><img src="../images/timer-stop-big.png" alt=""></button>
+        <button  id="breakButton"><img src="../images/timer-complete-big.png" alt=""></button>
     </div>
     <div class="menu-cont">
-        <div class="settings-icon" ><img src="./images/setting-general.png" alt="settings icon"></div>
-        <div class="report-icon"><img src="./images/header-report.png" alt="report icon"></div>
+        <button class="settings-icon" ><img src="../images/setting-general.svg" alt="settings icon"></button>
+        <button class="report-icon"><img src="../images/data-report-icon.svg" alt="report icon"></button>
         <div id="settingsCont" class="settings">
             <div class="settings-content">
                 <div class="upper-cont">
-                    <p></p>
-                    <div class="close-settings"><img src="./images/setting-close.png" alt="close settings"></div>
+                    <p>Timer Settings</p>
+                    <button class="close-settings"><img src="../images/setting-close.png" alt="close settings"></button>
                 </div>
                 <label for="pomodoroTime">
                     <p>Pomodoro Length</p>
                     <p><span id="pomodoroTimeMin">0</span>min</p>
                 </label>
-                <input id="pomodoroTime" oninput="changeTime()" type="range" value="25" min=5 max=60>
+                <input id="pomodoroTime" oninput="changeTime()" type="range" value="25" min=5 max=59>
 
                 <label for="breakTime">
                     <p>Break Length</p>
                     <p><span id="breakTimeMin">0</span>min</p>
                 </label>
-                <input id="breakTime" oninput="changeTime()" type="range" value="5" min=5 max=60>
+                <input id="breakTime" oninput="changeTime()" type="range" value="5" min=1 max=59>
 
                 <label for="longBreakTime">
                     <p>Long Break Length</p>
                     <p><span id="longBreakTimeMin">0</span>min</p>
                 </label>
-                <input id="longBreakTime" oninput="changeTime()" type="range" value="15" min=5 max=60>                
+                <input id="longBreakTime" oninput="changeTime()" type="range" value="15" min=1 max=59>                
             </div>
-        </div> 
+            <div class="report-content">
+                <div class="upper-cont">
+                    <p>Data Report</p>
+                    <button class="close-settings close-report"><img src="../images/setting-close.png" alt="close data report"></button>
+                </div>
+                <div class="canvases">
+                    <canvas id="report-canvas" width='400' height="300"></canvas>
+                    <canvas id="dummy-canvas" width='400' height="300"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- <div class="done-cont">
-        <div class="pomodoro"><img src="./images/pomodoro-unfinished.png" alt="unfinished pomodoro"></div>
-        <div class="pomodoro"><img src="./images/pomodoro-unfinished.png" alt="unfinished pomodoro"></div>
-        <div class="pomodoro"><img src="./images/pomodoro-unfinished.png" alt="unfinished pomodoro"></div>
+        <div class="pomodoro"><img src="../images/pomodoro-unfinished.png" alt="unfinished pomodoro"></div>
+        <div class="pomodoro"><img src="../images/pomodoro-unfinished.png" alt="unfinished pomodoro"></div>
+        <div class="pomodoro"><img src="../images/pomodoro-unfinished.png" alt="unfinished pomodoro"></div>
     </div> -->
-    <script src="./js/main.js"></script>
-    <script src="./js/timer.js"></script>
 </body>
 </html>

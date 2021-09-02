@@ -1,0 +1,293 @@
+
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url(../fonts/Poppins-Light.ttf);
+}
+body{
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    position: relative;
+    background: linear-gradient(-20deg, #514edf 36%, #c933c066), black;
+    background: #514edf ;
+    transition: 350ms ease-in-out;
+}
+
+
+.main-cont{
+    padding: 250px 0;
+    height: 100vh;
+    text-align: center;
+    transition: 150ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    #time{
+        font-size: 80px;
+        font-family: sans-serif;
+        color: rgb(255, 255, 255);
+        margin-bottom: 30px;
+    }
+    > button{
+        width: 70px;
+        height: 70px;
+        background-color: transparent;
+        border: none;
+        margin: 10px;
+        &:focus{
+            outline:none;
+            box-shadow: none;
+        }
+        > img{
+            width: 100%;
+        }
+    }
+    #stopButton, #breakButton{
+        display: none;
+    }
+}
+
+.done-cont{
+    position: absolute;
+    max-width: 200px;
+    height: 25px;
+    top: 20px;
+    left: 25px;
+    display: flex;
+    .pomodoro{
+        &:not(:last-child){
+            margin-right: 10px;
+        }
+
+        width: 25px;
+        height: 25px;
+        > img{
+            width: 100%;
+        }
+    }
+}
+.menu-cont{
+    position: absolute;
+    max-width: 200px;
+    height: 35px;
+    top: 20px;
+    right: 0;
+    display: flex;
+    > button{
+        &:not(:last-child){
+            margin-right: 20px;
+        }
+    }
+    .report-icon, .settings-icon{
+        height: 35px;
+        width: 35px;
+        border: none;
+        background: transparent;
+        > img{
+            width: 100%;
+        }
+    }
+    
+    .settings {
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: rgb(0,0,0);  
+        background-color: rgba(0,0,0,0.4); 
+        animation-name: fadeIn;
+        animation-duration: 0.3s;
+        .report-content {
+            .canvases{
+                margin-top: 25px;
+                height: 90%;
+                overflow-y: scroll;
+                scrollbar-width: none;
+                &::-webkit-scrollbar{
+                    display: none;
+                }
+            }
+        }
+        .settings-content, .report-content {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            margin: 0 0 0 -225px;
+            background-color: #fefefe;
+            border-radius: 10px;
+            width: 450px; 
+            height: 80%;
+            animation-name: slideInSettings;
+            animation-duration: 0.3s;
+            padding: 25px;
+            position: relative;
+            .upper-cont{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                > p{
+                    font-size: 25px;
+                    font-weight: 600;
+                }
+                .close-settings{
+                    width: 30px;
+                    height: 30px;
+                    background: transparent;
+                    border: none;
+                    > img{
+                        width: 100%;
+                    }
+                }
+            }
+            > label{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 35px;
+                margin-bottom: 10px;
+            }
+            > input{
+                width: 100%;
+                & {
+                  height: 31px;
+                  -webkit-appearance: none;
+                  margin: 10px 0;
+                  width: 100%;
+                }
+                &:focus {
+                  outline: none;
+                }
+                &::-webkit-slider-runnable-track {
+                  width: 100%;
+                  height: 9px;
+                  cursor: pointer;
+                  background: #514edf;
+                  border: none;
+                  border-radius: 18px;
+                }
+                &::-webkit-slider-thumb {
+                  height: 25px;
+                  border: none;
+                  width: 25px;
+                  border-radius: 24px;
+                  background: #FEC007;
+                  cursor: pointer;
+                  -webkit-appearance: none;
+                  margin-top: -8px;
+                }
+                &:focus::-webkit-slider-runnable-track {
+                  background: #514edf;
+                }
+                &::-moz-range-track {
+                  width: 100%;
+                  border: none;
+                  height: 9px;
+                  cursor: pointer;
+                  background: #514edf;
+                  border-radius: 18px;
+                }
+                &::-moz-range-thumb {
+                  height: 25px;
+                  border: none;
+                  width: 25px;
+                  border-radius: 24px;
+                  background: #FEC007;
+                  cursor: pointer;
+                }
+                &::-ms-track {
+                  width: 100%;
+                  height: 9px;
+                  cursor: pointer;
+                  background: transparent;
+                  border-color: transparent;
+                  color: transparent;
+                }
+                &::-ms-fill-lower {
+                  background: #514edf;
+                  border-radius: 36px;
+                }
+                &::-ms-fill-upper {
+                  background: #6714E3;
+                  border-radius: 36px;
+                }
+                &::-ms-thumb {
+                  margin-top: 1px;
+                  height: 25px;
+                  border: none;
+                  width: 25px;
+                  border-radius: 24px;
+                  background: #FEC007;
+                  cursor: pointer;
+                }
+                &:focus::-ms-fill-lower {
+                  background: #6714E3;
+                }
+                &:focus::-ms-fill-upper {
+                  background: #6714E3;
+                }
+            }
+              
+        }
+    }
+}
+
+#report-canvas{
+    background: #fff;
+    border: 1px solid #0ff;
+    border-radius: 5px;
+}
+#dummy-canvas{
+    width: 100%;
+    background: #fff;
+    border: 1px solid #0ff;
+    border-radius: 5px;
+}
+
+@media (max-width: 499px){
+    .menu-cont{
+        .settings{
+            .settings-content, .report-content{
+                height: 100%;
+                top: 0;
+                left: 0;
+                margin: 0;
+                width: 100%;
+            }
+        }
+    }
+    @keyframes slideInSettings {
+            from {top: -100%; opacity: 0}
+            to {top: 0%; opacity: 1}
+        }
+    @keyframes slideOutSettings {
+        from{top: 0%; opacity: 1}
+        to{top: -100%; opacity: 0}
+    }
+}
+@media (min-width: 500px){
+    @keyframes slideInSettings {
+            from {top: -100%; opacity: 0}
+            to {top: 10%; opacity: 1}
+        }
+    @keyframes slideOutSettings {
+        from{top: 10%; opacity: 1}
+        to{top: -100%; opacity: 0}
+    }
+}
+@keyframes fadeIn {
+    from {opacity: 0} 
+    to {opacity: 1}
+}
+@keyframes fadeOut {
+    from {opacity: 1} 
+    to {opacity: 0}
+}

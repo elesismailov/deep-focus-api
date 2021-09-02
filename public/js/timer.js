@@ -22,14 +22,12 @@ function resetValues(){
     workTimer.time = userWorkTime;
     breakTimer.time = userBreakTime;
     longBreakTimer.time = userLongBreakTime;
-    thisSessionTime = 0;
 };
 function setTimer(timer){
     document.querySelector("#time").innerHTML = `${("0" + Math.floor(timer.time%86400%3600/60)).slice(-2)}:${("0" + timer.time%86400%3600%60).slice(-2)}`;
     timer.time --;
     thisSessionTime ++
     if (timer.time < 0){
-        saveSessionData();
         resetValues();
         clearInterval(mainTimer)
         if (nowGoing == "towork"){
@@ -42,6 +40,8 @@ function setTimer(timer){
         } else {
             donePomodoro(1);
             setsNum ++;
+            saveSessionData();
+            thisSessionTime = 0;
             nowGoing = "towork";
             breakBt.style.display = "inline";
             pauseBt.style.display = "none";

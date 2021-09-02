@@ -5,6 +5,10 @@
   margin: 0;
 }
 
+*:focus-visible {
+  outline: dashed 2px #0ff;
+}
+
 @font-face {
   font-family: "Poppins";
   src: url(../fonts/Poppins-Light.ttf);
@@ -44,10 +48,8 @@ body {
   margin: 10px;
 }
 
-.main-cont > button:focus {
-  outline: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+.main-cont > button:focus-visible {
+  outline: dashed 2px #0ff;
 }
 
 .main-cont > button > img {
@@ -126,10 +128,18 @@ body {
 }
 
 .menu-cont .settings .report-content .canvases {
-  margin-top: 25px;
+  margin-top: 15px;
   height: 90%;
   overflow-y: scroll;
   scrollbar-width: none;
+}
+
+.menu-cont .settings .report-content .canvases > p {
+  margin-bottom: 5px;
+}
+
+.menu-cont .settings .report-content .canvases > p > span {
+  font-weight: 700;
 }
 
 .menu-cont .settings .report-content .canvases::-webkit-scrollbar {
@@ -208,7 +218,7 @@ body {
 }
 
 .menu-cont .settings .settings-content > input:focus, .menu-cont .settings .report-content > input:focus {
-  outline: none;
+  outline: dashed 2px #0ff;
 }
 
 .menu-cont .settings .settings-content > input::-webkit-slider-runnable-track, .menu-cont .settings .report-content > input::-webkit-slider-runnable-track {
@@ -221,9 +231,9 @@ body {
 }
 
 .menu-cont .settings .settings-content > input::-webkit-slider-thumb, .menu-cont .settings .report-content > input::-webkit-slider-thumb {
-  height: 25px;
+  height: 22px;
   border: none;
-  width: 25px;
+  width: 22px;
   border-radius: 24px;
   background: #FEC007;
   cursor: pointer;
@@ -232,7 +242,7 @@ body {
 }
 
 .menu-cont .settings .settings-content > input:focus::-webkit-slider-runnable-track, .menu-cont .settings .report-content > input:focus::-webkit-slider-runnable-track {
-  background: #514edf;
+  outline: dashed 2px #0ff;
 }
 
 .menu-cont .settings .settings-content > input::-moz-range-track, .menu-cont .settings .report-content > input::-moz-range-track {
@@ -245,9 +255,9 @@ body {
 }
 
 .menu-cont .settings .settings-content > input::-moz-range-thumb, .menu-cont .settings .report-content > input::-moz-range-thumb {
-  height: 25px;
+  height: 22px;
   border: none;
-  width: 25px;
+  width: 22px;
   border-radius: 24px;
   background: #FEC007;
   cursor: pointer;
@@ -274,29 +284,30 @@ body {
 
 .menu-cont .settings .settings-content > input::-ms-thumb, .menu-cont .settings .report-content > input::-ms-thumb {
   margin-top: 1px;
-  height: 25px;
+  height: 22px;
   border: none;
-  width: 25px;
+  width: 22px;
   border-radius: 24px;
   background: #FEC007;
   cursor: pointer;
 }
 
 .menu-cont .settings .settings-content > input:focus::-ms-fill-lower, .menu-cont .settings .report-content > input:focus::-ms-fill-lower {
-  background: #6714E3;
+  outline: dashed 2px #0ff;
 }
 
 .menu-cont .settings .settings-content > input:focus::-ms-fill-upper, .menu-cont .settings .report-content > input:focus::-ms-fill-upper {
-  background: #6714E3;
+  outline: dashed 2px #0ff;
 }
 
 #report-canvas {
   background: #fff;
   border: 1px solid #0ff;
   border-radius: 5px;
+  margin-bottom: 20px;
 }
 
-#dummy-canvas {
+#monthly-report-canvas {
   width: 100%;
   background: #fff;
   border: 1px solid #0ff;

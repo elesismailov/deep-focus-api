@@ -26,7 +26,6 @@ const server = http.createServer((request, response) => {
         db.run(`UPDATE timeData SET UserLongBreakTime = ${body.userLongBreakTime}`)
 
         db.close()
-        // save this body to data.json
       })
     } else if (request.url === "/saveSessionData") {
       let body = '';
@@ -36,30 +35,46 @@ const server = http.createServer((request, response) => {
       request.on("end", () => {
         body = JSON.parse(body)
         db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
-        
+        db.get("SELECT * FROM dateReport ORDER BY id DESC", (err, row) => {
+          if (row.Date === body.date) {
+            db.run(`UPDATE dateReport SET 
+              TotalFocusTime = TotalFocusTime + ${body.sessionTime}, 
+              DoneSets = DoneSets + ${body.doneSets} 
+              WHERE id = ${row.id}`)
+          } else {
+            db.run(`INSERT INTO dateReport(
+              id,
+              Date,
+              TotalFocusTime,
+              DoneSets)
+              VALUES(${row.id +1}, '${body.date}', ${body.sessionTime}, ${body.doneSets})`)
+          }
+        })
         db.run(`UPDATE timeData SET TotalFocusTime = TotalFocusTime + ${body.sessionTime}`)
         db.run(`UPDATE timeData SET TotalDoneSets = TotalDoneSets + ${body.doneSets}`)
-
         db.close()
       })
     }
   } else if (request.method == "GET") {
     if (request.url === "/restoreTimeData") {
-      response.writeHead(200, {"Content-Type": "application/json"})
       db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
       db.get(`SELECT * FROM timeData`, (err, rows) => {
+        response.writeHead(200, {"Content-Type": "application/json"})
         response.write(JSON.stringify(rows))
         response.end()
+        db.close()
       })
-      db.close()
     } else if (request.url === "/get-report-data") {
-      response.writeHead(200, {"Content-Type": "application/json"})
       db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
       db.all(`SELECT * FROM dateReport ORDER BY id DESC LIMIT 30`, (err, rows) => {
-        response.write(JSON.stringify({dateReport: rows}))
-        response.end()
+        // response.write(JSON.stringify({dateReport: rows}))
+        db.get(`SELECT TotalFocusTime, TotalDoneSets FROM timeData`, (err, row) => {
+          response.writeHead(200, {"Content-Type": "application/json"})
+          response.write(JSON.stringify({dateReport: rows, timeReport: row}))
+          response.end()
+          db.close()
+        })
       })
-      db.close()
     } else{
  
     let filePath = path.join(

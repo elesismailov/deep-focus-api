@@ -36,7 +36,7 @@ function setTimer(timer){
             breakBt.style.display = "none";
             pauseBt.style.display = "inline";
             // document.querySelector(".main-cont").style.opacity = "1";
-            document.body.style.backgroundColor = "#514edf"
+            document.body.style.backgroundColor = "var(--main-bg-color)"
         } else {
             donePomodoro(1);
             setsNum ++;
@@ -46,13 +46,13 @@ function setTimer(timer){
             breakBt.style.display = "inline";
             pauseBt.style.display = "none";
             // document.querySelector(".main-cont").style.opacity = "0.7";
-            document.body.style.backgroundColor = "#7607d1";
+            document.body.style.backgroundColor = "var(--break-bg)";
             if (setsNum >= 3){
                 donePomodoro(0);
                 setsNum = 0;
                 mainTimer = setInterval(setTimer, 1000, longBreakTimer);
                 // document.querySelector(".main-cont").style.opacity = "0.4";
-                document.body.style.backgroundColor = "#00ffdb";
+                document.body.style.backgroundColor = "var(--long-break-bg)";
             } else {
                 mainTimer = setInterval(setTimer, 1000, breakTimer)
             }
@@ -85,7 +85,7 @@ function stopTimer(){
     resetValues();
 
     document.querySelector("#time").innerHTML = `${("0" + Math.floor(workTimer.time%86400%3600/60)).slice(-2)}:${("0" + workTimer.time%86400%3600%60).slice(-2)}`;
-    document.body.style.backgroundColor = "#514edf"
+    document.body.style.backgroundColor = "var(--main-bg-color)";
     stopBt.style.display = 'none';
     breakBt.style.display = "none";
     pauseBt.style.display = "inline";
@@ -102,7 +102,7 @@ function clearBreak(){
     breakBt.style.display = "none";
     pauseBt.style.display = "inline";
     // document.querySelector(".main-cont").style.opacity = "1";
-    document.body.style.backgroundColor = "#514edf"
+    document.body.style.backgroundColor = "var(--main-bg-color)"
 
 };
 
@@ -116,6 +116,3 @@ function donePomodoro(set){
     //     }
     // }
 }
-
-
-restoreData()

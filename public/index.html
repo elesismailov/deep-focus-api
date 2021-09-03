@@ -10,7 +10,7 @@
     <script defer src="../js/main.js"></script>
     <script defer src="../js/timer.js"></script>
 </head>
-<body>
+<body class="">
     <div class="main-cont">
         <p id="time">00:00</p>
         <button  id="pauseButton"><img src="../images/timer-start-big.png" alt=""></button>
@@ -26,6 +26,12 @@
                     <p>Timer Settings</p>
                     <button class="close-settings"><img src="../images/setting-close.png" alt="close settings"></button>
                 </div>
+                <label for="themeswitch">
+                    <p>Select Theme</p>
+                </label>
+                <input type="radio" id="theme1" name="themeswitch">
+                <input type="radio" id="theme2" name="themeswitch">
+                <!-- <input type="radio" id="theme3" name="themeswitch"> -->
                 <label for="pomodoroTime">
                     <p>Pomodoro Length</p>
                     <p><span id="pomodoroTimeMin">0</span>min</p>
@@ -43,6 +49,7 @@
                     <p><span id="longBreakTimeMin">0</span>min</p>
                 </label>
                 <input id="longBreakTime" oninput="changeTime()" type="range" value="15" min=1 max=59>                
+
             </div>
             <div class="report-content">
                 <div class="upper-cont">
@@ -51,7 +58,7 @@
                 </div>
                 <div class="canvases">
                     <p>Total Focus Time:  <span id="total-focus-time"></span></p>
-                    <p>Total Done Units:  <span id="total-done-sets"></span></p>
+                    <p>Total Done Sets:  <span id="total-done-sets"></span></p>
                     <p>Weekly Report</p>
                     <canvas id="report-canvas" width='400' height="300"></canvas>
                     <p>Monthly Report</p>

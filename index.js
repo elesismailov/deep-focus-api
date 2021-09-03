@@ -54,6 +54,16 @@ const server = http.createServer((request, response) => {
         db.run(`UPDATE timeData SET TotalDoneSets = TotalDoneSets + ${body.doneSets}`)
         db.close()
       })
+    } else if (request.url === "/theme") {
+      let body = '';
+      request.on("data", c => {
+        body += c
+      });
+      request.on("end", () => {
+        body = JSON.parse(body)
+        db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+        db.run(`UPDATE timeData SET Theme = '${body.theme}'`, () => db.close())
+    })
     }
   } else if (request.method == "GET") {
     if (request.url === "/restoreTimeData") {
@@ -67,7 +77,6 @@ const server = http.createServer((request, response) => {
     } else if (request.url === "/get-report-data") {
       db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
       db.all(`SELECT * FROM dateReport ORDER BY id DESC LIMIT 30`, (err, rows) => {
-        // response.write(JSON.stringify({dateReport: rows}))
         db.get(`SELECT TotalFocusTime, TotalDoneSets FROM timeData`, (err, row) => {
           response.writeHead(200, {"Content-Type": "application/json"})
           response.write(JSON.stringify({dateReport: rows, timeReport: row}))
@@ -75,7 +84,15 @@ const server = http.createServer((request, response) => {
           db.close()
         })
       })
-    } else{
+    } else if (request.url === "/theme") {
+      db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+      db.get(`SELECT theme FROM timeData`, (err, row) => {
+        response.writeHead(200, {"Content-Type": "application/json"})
+        response.write(JSON.stringify(row))
+        response.end()
+        db.close()
+      })
+    } else {
  
     let filePath = path.join(
       __dirname, "public", request.url === "/" ? "index.html" : request.url

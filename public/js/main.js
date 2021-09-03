@@ -1,7 +1,39 @@
 
 
-//////////                 TIMER FUNCTION-ALITY    AND    SAVING DATA         /////////
+//////////              THEME SWITCH               ///////////
 
+let lastTheme;
+function getTheme() {
+    let request = new XMLHttpRequest();
+    request.open('GET', "/theme");
+    request.send();
+    request.addEventListener("load", () => {
+        lastTheme = JSON.parse(request.response).Theme
+        renderTheme(lastTheme)
+    })
+};
+
+document.querySelector("#theme1").addEventListener("click", () => {
+    renderTheme("theme1")
+})
+document.querySelector("#theme2").addEventListener("click", () => {
+    renderTheme("theme2")
+})
+function renderTheme(theme) {
+    if (document.body.classList[0]) {
+        let request = new XMLHttpRequest();
+        request.open('POST', "/theme");
+        request.send(JSON.stringify({theme}));
+    }
+    document.body.classList = theme;
+    document.querySelector(`#${theme}`).checked = true;
+}
+
+getTheme()
+restoreData()
+
+
+//////////                 TIMER FUNCTION-ALITY    AND    SAVING DATA         /////////
 
 let userWorkTime = 1500,
 userBreakTime = 300,
@@ -125,28 +157,27 @@ let mContext;
 
 function renderCanvas(reportData) {
     reportCanvas = document.querySelector("#report-canvas");
-    reportCanvas.width = reportCanvas.parentElement.parentElement.getClientRects()[0].width-52;
     rContext = reportCanvas.getContext("2d");
     monthlyCanvas = document.querySelector("#monthly-report-canvas");
-    monthlyCanvas.width = monthlyCanvas.parentElement.parentElement.getClientRects()[0].width-52;
     mContext = monthlyCanvas.getContext("2d");
+    reportCanvas.width = reportCanvas.parentElement.parentElement.getClientRects()[0].width-52;
+    monthlyCanvas.width = monthlyCanvas.parentElement.parentElement.getClientRects()[0].width-52;
+    reportCanvas.height = (reportCanvas.parentElement.getClientRects()[0].width-50)*3/4;
+    monthlyCanvas.height = (monthlyCanvas.parentElement.getClientRects()[0].width-50)*3/4;
+    
+    let textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
+    let strokeColor = getComputedStyle(document.body).getPropertyValue('--canvas-stroke');
     
     document.querySelector("#total-focus-time").innerHTML = (''+reportData.timeReport.TotalFocusTime/60/60).slice(0,4) +'h';
     document.querySelector("#total-done-sets").innerHTML = reportData.timeReport.TotalDoneSets;
 
     let dateReport = reportData.dateReport;
     dateReport.reverse()
-    let maxLines = dateReport.slice(-7).reduce( (a, arr) => arr.DoneSets > a ? arr.DoneSets : a, 0) + 1; // find maximum done pomodoros of the last 7 days
+    let maxLinesWeek = dateReport.slice(-7).reduce( (a, arr) => arr.DoneSets > a ? arr.DoneSets : a, 0) + 1; // find maximum done pomodoros of the last 7 days
+    let maxLinesMonth = dateReport.reduce( (a, arr) => arr.DoneSets > a ? arr.DoneSets : a, 0) + 1; // find maximum done pomodoros of the last 30 days
     dateReport.reverse()
 
-    rContext.lineWidth = 0.4;
-    rContext.strokeStyle = "rgba(0, 0, 0, 0.4)";
-    rContext.fillStyle = "#000";
     rContext.font = "13px Poppins";
-    
-    mContext.lineWidth = 0.2;
-    mContext.strokeStyle = "rgba(0, 0, 0, 0.4)";
-    mContext.fillStyle = "#fff";
     mContext.font = "13px Poppins";
     
     if (window.innerWidth < 500) {
@@ -156,19 +187,22 @@ function renderCanvas(reportData) {
         reportCanvas.height = (reportCanvas.parentElement.getClientRects()[0].width-50)*3/4;
         monthlyCanvas.height = (monthlyCanvas.parentElement.getClientRects()[0].width-50)*3/4;
         
-        rContext.lineWidth = 0.4;
-        rContext.strokeStyle = "rgba(0, 0, 0, 0.4)";
         rContext.font = "10px Poppins";
-
-        mContext.lineWidth = 0.2;
-        mContext.strokeStyle = "rgba(0, 0, 0, 0.4)";
+        
         mContext.font = "10px Poppins";
     }
+    rContext.fillStyle = textColor;
+    mContext.fillStyle = textColor;
+    rContext.lineWidth = 0.4;
+    mContext.lineWidth = 0.2;
+    rContext.strokeStyle = strokeColor;
+    mContext.strokeStyle = strokeColor;
+
     rContext.beginPath()
-    for (let i = 1; i < maxLines; i++) {
-        rContext.moveTo(reportCanvas.width/8,reportCanvas.height/maxLines*i);
-        rContext.lineTo(reportCanvas.width, reportCanvas.height/maxLines*i)
-        rContext.fillText(maxLines-i, reportCanvas.width/8-20, reportCanvas.height/maxLines*i)
+    for (let i = 1; i < maxLinesWeek; i++) {
+        rContext.moveTo(reportCanvas.width/8,reportCanvas.height/maxLinesWeek*i);
+        rContext.lineTo(reportCanvas.width, reportCanvas.height/maxLinesWeek*i)
+        rContext.fillText(maxLinesWeek-i, reportCanvas.width/8-20, reportCanvas.height/maxLinesWeek*i)
     }
     dateReport.reverse()
     for (let j = 1; j < 8; j++) {
@@ -183,22 +217,29 @@ function renderCanvas(reportData) {
     dateReport.reverse()
     rContext.stroke()
     rContext.closePath()
-    
-    rContext.save()
-    rContext.fillStyle = "black";
-    rContext.rotate(-Math.PI / 2);
-    rContext.fillText("Done Units", -180, 15)
-    rContext.restore()
-    rContext.fillText("Date", 7, reportCanvas.height-5)
+    mContext.beginPath()
+    for (let j = 1; j < 35; j++) {
+        if (j > 2) {
+            mContext.moveTo(monthlyCanvas.width/35*j, monthlyCanvas.height)
+            mContext.lineTo(monthlyCanvas.width/35*j, 0)
+        }
+    }
+    for (let i = 1; i < (maxLinesMonth+1); i++) {
+        mContext.moveTo(monthlyCanvas.width/35*3,monthlyCanvas.height/(maxLinesMonth+1)*i);
+        mContext.lineTo(monthlyCanvas.width, monthlyCanvas.height/(maxLinesMonth+1)*i)
+        // mContext.fillText(maxLinesMonth-i, reportCanvas.width/8-20, reportCanvas.height/maxLinesWeek*i)
+    }
+    mContext.stroke()
+    mContext.closePath()
 
     rContext.beginPath()    ///////
     rContext.lineWidth = 1.5;
     rContext.strokeStyle = "#ff0000"
-    rContext.moveTo(reportCanvas.width/8, reportCanvas.heigth-1)
+    rContext.moveTo(reportCanvas.width/8, reportCanvas.height-1)
     dateReport.reverse()
     for (let i = 1; i < 8; i++) {
         try{
-            rContext.lineTo(reportCanvas.width/8*i, reportCanvas.height/maxLines*(maxLines - dateReport.slice(-7)[i-1].DoneSets)-1)
+            rContext.lineTo(reportCanvas.width/8*i, reportCanvas.height/maxLinesWeek*(maxLinesWeek - dateReport.slice(-7)[i-1].DoneSets)-1)
         } catch (err){
             rContext.lineTo(reportCanvas.width/8*i, reportCanvas.height-1)
         }
@@ -206,33 +247,37 @@ function renderCanvas(reportData) {
     dateReport.reverse()
     rContext.stroke()
     rContext.closePath()    ///////
-
-
-
     
     mContext.beginPath()
-    dateReport.reverse()
+    mContext.lineWidth = 1.5;
+    mContext.strokeStyle = "#ff0000"
     for (let j = 1; j < 35; j++) {
         if (j > 2) {
-            mContext.moveTo(reportCanvas.width/35*j, reportCanvas.height)
-            mContext.lineTo(reportCanvas.width/35*j, 0)
+            if (34 - dateReport.length < j) {
+                mContext.lineTo(monthlyCanvas.width/35*j, monthlyCanvas.height/(maxLinesMonth)*(maxLinesMonth - dateReport[34-j].DoneSets)-1)
+            }else {
+                mContext.lineTo(monthlyCanvas.width/35*j, monthlyCanvas.height-2)
+            }
         }
     }
-    dateReport.reverse()
-    let sample = dateReport.filter(obj => obj.Date.slice(-5,-3) != new Date().getMonth())
-    for (let i = 1; i < (maxLines+1); i++) {
-        mContext.moveTo(0,reportCanvas.height/(maxLines+1)*i);
-        mContext.lineTo(reportCanvas.width, reportCanvas.height/(maxLines+1)*i)
-        // mContext.fillText(maxLines-i, reportCanvas.width/8-20, reportCanvas.height/maxLines*i)
-    }
-    mContext.fillStyle = "#000";
-    mContext.fillText("01", 27, monthlyCanvas.height-5)
-    mContext.fillText("31", monthlyCanvas.width-19, reportCanvas.height-5)
     mContext.stroke()
     mContext.closePath()
 
-    mContext.beginPath()
-    // for ()
+    
+    rContext.save()
+    rContext.rotate(-Math.PI / 2);
+    rContext.fillText("Done Sets", (window.innerWidth < 500? -110:-170), (window.innerWidth < 500? 11:15))
+    rContext.restore()
+    rContext.fillText("Date", 7, reportCanvas.height-5)
+
+    mContext.fillText("0", 25, monthlyCanvas.height-5)
+    mContext.fillText("today", monthlyCanvas.width-(window.innerWidth < 500? 32:42), monthlyCanvas.height-5)
+    mContext.fillText(maxLinesMonth-1, 20, monthlyCanvas.height/maxLinesMonth)
+
+    mContext.save()
+    mContext.rotate(-Math.PI / 2);
+    mContext.fillText("Done Sets", (window.innerWidth < 500? -120:-180), 15)
+    mContext.restore()
 }
 
 

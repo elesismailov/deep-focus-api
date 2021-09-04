@@ -1,4 +1,11 @@
 
+let lastDataTimer;
+function debouncer(func, time) {
+    clearTimeout(lastDataTimer)
+    lastDataTimer = setTimeout(func, time)
+}
+
+
 
 //////////              THEME SWITCH               ///////////
 
@@ -8,22 +15,20 @@ function getTheme() {
     request.open('GET', "/theme");
     request.send();
     request.addEventListener("load", () => {
-        lastTheme = JSON.parse(request.response).Theme
+        lastTheme = JSON.parse(request.response).Theme;
         renderTheme(lastTheme)
     })
 };
 
-document.querySelector("#theme1").addEventListener("click", () => {
-    renderTheme("theme1")
-})
-document.querySelector("#theme2").addEventListener("click", () => {
-    renderTheme("theme2")
-})
+document.querySelector("#theme1").addEventListener("click", () => {renderTheme("theme1")})
+document.querySelector("#theme2").addEventListener("click", () => {renderTheme("theme2")})
+document.querySelector("#theme3").addEventListener("click", () => {renderTheme("theme3")})
 function renderTheme(theme) {
-    if (document.body.classList[0]) {
+    if (document.body.classList[0] && document.body.classList[0] != theme) {
         let request = new XMLHttpRequest();
         request.open('POST', "/theme");
-        request.send(JSON.stringify({theme}));
+        debouncer(()=>{request.send(JSON.stringify({theme}))}, 1000)
+        
     }
     document.body.classList = theme;
     document.querySelector(`#${theme}`).checked = true;
@@ -47,9 +52,20 @@ function changeTime() {
     document.querySelector("#breakTimeMin").innerHTML =  document.querySelector("#breakTime").value;
     document.querySelector("#longBreakTimeMin").innerHTML =  document.querySelector("#longBreakTime").value;
     stopTimer()
-    saveTimerData()
+    debouncer(saveTimerData, 600)
 }
  
+function saveTimerData(){
+    let timeData = {};
+    timeData.userWorkTime = userWorkTime;
+    timeData.userBreakTime = userBreakTime;
+    timeData.userLongBreakTime = userLongBreakTime;
+
+    let postT = new XMLHttpRequest();
+    postT.open('POST', "/saveTimerData");
+    postT.setRequestHeader("Content-Type", "application/json");
+    postT.send(JSON.stringify(timeData));
+}
 function saveSessionData () {
     let data = {
         sessionTime: thisSessionTime,
@@ -61,17 +77,6 @@ function saveSessionData () {
     request.setRequestHeader("Content-Type", "application/json");
     thisSessionTime ? request.send(JSON.stringify(data)) : 0;
 
-}
-function saveTimerData(){
-    let timeData = {};
-    timeData.userWorkTime = userWorkTime;
-    timeData.userBreakTime = userBreakTime;
-    timeData.userLongBreakTime = userLongBreakTime;
-
-    let postT = new XMLHttpRequest();
-    postT.open('POST', "/saveTimerData");
-    postT.setRequestHeader("Content-Type", "application/json");
-    postT.send(JSON.stringify(timeData));
 }
 function restoreData(){
     let getT = new XMLHttpRequest();

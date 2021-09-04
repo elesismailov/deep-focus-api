@@ -6,7 +6,7 @@ const path = require("path");
 const sqlite3 = require('sqlite3').verbose();
 
 
-let db;
+// let db;
 
 
 const server = http.createServer((request, response) => {
@@ -19,7 +19,7 @@ const server = http.createServer((request, response) => {
       });
       request.on("end", ()=>{
         body = JSON.parse(body)
-        db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+        let db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
         
         db.run(`UPDATE timeData SET UserWorkTime = ${body.userWorkTime}`)
         db.run(`UPDATE timeData SET UserBreakTime = ${body.userBreakTime}`)
@@ -34,7 +34,7 @@ const server = http.createServer((request, response) => {
       });
       request.on("end", () => {
         body = JSON.parse(body)
-        db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+        let db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
         db.get("SELECT * FROM dateReport ORDER BY id DESC", (err, row) => {
           if (row.Date === body.date) {
             db.run(`UPDATE dateReport SET 
@@ -61,21 +61,23 @@ const server = http.createServer((request, response) => {
       });
       request.on("end", () => {
         body = JSON.parse(body)
-        db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
-        db.run(`UPDATE timeData SET Theme = '${body.theme}'`, () => db.close())
+        let db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+        db.run(`UPDATE timeData SET Theme = '${body.theme}'`)
+        db.close()
     })
     }
   } else if (request.method == "GET") {
     if (request.url === "/restoreTimeData") {
-      db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+      let db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
       db.get(`SELECT * FROM timeData`, (err, rows) => {
+        if (err) throw err;
         response.writeHead(200, {"Content-Type": "application/json"})
         response.write(JSON.stringify(rows))
         response.end()
         db.close()
       })
     } else if (request.url === "/get-report-data") {
-      db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+      let db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
       db.all(`SELECT * FROM dateReport ORDER BY id DESC LIMIT 30`, (err, rows) => {
         db.get(`SELECT TotalFocusTime, TotalDoneSets FROM timeData`, (err, row) => {
           response.writeHead(200, {"Content-Type": "application/json"})
@@ -85,7 +87,7 @@ const server = http.createServer((request, response) => {
         })
       })
     } else if (request.url === "/theme") {
-      db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
+      let db = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, (err) => {if (err) throw err;});
       db.get(`SELECT theme FROM timeData`, (err, row) => {
         response.writeHead(200, {"Content-Type": "application/json"})
         response.write(JSON.stringify(row))

@@ -36,7 +36,7 @@ function setTimer(timer){
             breakBt.style.display = "none";
             pauseBt.style.display = "inline";
             // document.querySelector(".main-cont").style.opacity = "1";
-            document.body.style.backgroundColor = "var(--main-bg-color)"
+            document.body.style.background = "var(--main-bg-color)"
         } else {
             donePomodoro(1);
             setsNum ++;
@@ -46,13 +46,13 @@ function setTimer(timer){
             breakBt.style.display = "inline";
             pauseBt.style.display = "none";
             // document.querySelector(".main-cont").style.opacity = "0.7";
-            document.body.style.backgroundColor = "var(--break-bg)";
+            document.body.style.background = "var(--break-bg)";
             if (setsNum >= 3){
                 donePomodoro(0);
                 setsNum = 0;
                 mainTimer = setInterval(setTimer, 1000, longBreakTimer);
                 // document.querySelector(".main-cont").style.opacity = "0.4";
-                document.body.style.backgroundColor = "var(--long-break-bg)";
+                document.body.style.background = "var(--long-break-bg)";
             } else {
                 mainTimer = setInterval(setTimer, 1000, breakTimer)
             }
@@ -70,6 +70,7 @@ function pauseTimer(){
     pauseBt.addEventListener('click', playTimer);
     pauseBt.childNodes[0].src = "../images/timer-start-big.png";
     stopBt.style.display = 'inline';
+    document.querySelector(".buttons").style.marginLeft = "-90px";
 };
 function playTimer(){
     mainTimer = setInterval(setTimer, 1000, workTimer);
@@ -78,14 +79,16 @@ function playTimer(){
     
     pauseBt.childNodes[0].src = "../images/timer-pause-big.png";
     stopBt.style.display = 'none';
+    document.querySelector(".buttons").style.marginLeft = "-45px";
 };
 function stopTimer(){
     clearInterval(mainTimer);
-    saveSessionData()
+    // saveSessionData()
+    debouncer(saveSessionData, 1000)
     resetValues();
 
     document.querySelector("#time").innerHTML = `${("0" + Math.floor(workTimer.time%86400%3600/60)).slice(-2)}:${("0" + workTimer.time%86400%3600%60).slice(-2)}`;
-    document.body.style.backgroundColor = "var(--main-bg-color)";
+    document.body.style.background = "var(--main-bg-color)";
     stopBt.style.display = 'none';
     breakBt.style.display = "none";
     pauseBt.style.display = "inline";
@@ -102,7 +105,7 @@ function clearBreak(){
     breakBt.style.display = "none";
     pauseBt.style.display = "inline";
     // document.querySelector(".main-cont").style.opacity = "1";
-    document.body.style.backgroundColor = "var(--main-bg-color)"
+    document.body.style.background = "var(--main-bg-color)"
 
 };
 

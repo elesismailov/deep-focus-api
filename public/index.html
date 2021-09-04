@@ -13,13 +13,19 @@
 <body class="">
     <div class="main-cont">
         <p id="time">00:00</p>
-        <button  id="pauseButton"><img src="../images/timer-start-big.png" alt=""></button>
-        <button  id="stopButton"><img src="../images/timer-stop-big.png" alt=""></button>
-        <button  id="breakButton"><img src="../images/timer-complete-big.png" alt=""></button>
+        <ul class="buttons">
+            <li><button  id="pauseButton"><img src="../images/timer-start-big.png" alt=""></button></li>
+            <li><button  id="stopButton"><img src="../images/timer-stop-big.png" alt=""></button></li>
+            <li><button  id="breakButton"><img src="../images/timer-complete-big.png" alt=""></button></li>
+        </ul>
     </div>
     <div class="menu-cont">
-        <button class="settings-icon" ><img src="../images/setting-general.svg" alt="settings icon"></button>
-        <button class="report-icon"><img src="../images/data-report-icon.svg" alt="report icon"></button>
+        <button class="settings-icon" >
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2045 2045"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;}.cls-1,.cls-2,.cls-3,.cls-4{stroke:var(--icon-color);stroke-miterlimit:10;}.cls-1,.cls-2{stroke-width:65px;}.cls-2{stroke-linecap:round;}.cls-3,.cls-4{stroke-width:50px;}.cls-4{fill:var(--icon-color)}</style></defs><title>settings-icon</title><rect class="cls-1" x="22.5" y="22.5" width="2000" height="2000" rx="166.68"/><line class="cls-2" x1="1387" y1="724" x2="1546" y2="724"/><line class="cls-2" x1="486" y1="724" x2="1113" y2="724"/><line class="cls-2" x1="951" y1="1062" x2="1546" y2="1062"/><line class="cls-2" x1="486" y1="1062" x2="675" y2="1062"/><line class="cls-2" x1="1455" y1="1400" x2="1546" y2="1400"/><line class="cls-2" x1="486" y1="1400" x2="1188" y2="1400"/><circle class="cls-3" cx="1252" cy="724" r="125"/><circle class="cls-4" cx="816" cy="1062" r="125"/><circle class="cls-3" cx="1321" cy="1400" r="125"/></svg>
+        </button>
+        <button class="report-icon">
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2065 2065"><defs><style>.cls-1,.cls-2,.cls-3{fill:none;stroke:var(--icon-color);stroke-width:65px;}.cls-1,.cls-2{stroke-miterlimit:10;}.cls-2,.cls-3{stroke-linecap:round;}.cls-3{stroke-linejoin:round;}</style></defs><title>data-report-icon</title><rect class="cls-1" x="32.5" y="32.5" width="2000" height="2000" rx="166.68"/><line class="cls-2" x1="1032.91" y1="1199.25" x2="1032.91" y2="1621.33"/><line class="cls-2" x1="1292.72" y1="960.74" x2="1292.72" y2="1621.69"/><line class="cls-2" x1="1553.31" y1="721.5" x2="1553.31" y2="1621.69"/><line class="cls-2" x1="773.09" y1="1007.44" x2="773.09" y2="1621.33"/><line class="cls-2" x1="512.5" y1="1621.33" x2="512.5" y2="1171.6"/><polyline class="cls-3" points="511.81 973.55 772.16 713.28 1032.51 950.85 1552.82 430.7 1377.82 430.31"/></svg>
+        </button>
         <div id="settingsCont" class="settings">
             <div class="settings-content">
                 <div class="upper-cont">
@@ -29,9 +35,11 @@
                 <label for="themeswitch">
                     <p>Select Theme</p>
                 </label>
-                <input type="radio" id="theme1" name="themeswitch">
-                <input type="radio" id="theme2" name="themeswitch">
-                <!-- <input type="radio" id="theme3" name="themeswitch"> -->
+                <ul focus="true">
+                    <li><input type="radio" id="theme1" name="themeswitch"></li>
+                    <li><input type="radio" id="theme2" name="themeswitch"></li>
+                    <li><input type="radio" id="theme3" name="themeswitch"></li>
+                </ul>
                 <label for="pomodoroTime">
                     <p>Pomodoro Length</p>
                     <p><span id="pomodoroTimeMin">0</span>min</p>

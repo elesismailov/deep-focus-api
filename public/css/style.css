@@ -299,7 +299,8 @@ body {
 }
 
 .menu-cont .settings .settings-content > ul > li > input[type="radio"]:checked, .menu-cont .settings .report-content > ul > li > input[type="radio"]:checked {
-  outline: 3px solid #0ff;
+  -webkit-box-shadow: 0 0 0 3px #0ff;
+          box-shadow: 0 0 0 3px #0ff;
 }
 
 .menu-cont .settings .settings-content > ul > li > input[type="radio"]:focus-visible, .menu-cont .settings .report-content > ul > li > input[type="radio"]:focus-visible {
@@ -312,6 +313,10 @@ body {
 
 .menu-cont .settings .settings-content > ul > li #theme2, .menu-cont .settings .report-content > ul > li #theme2 {
   background: linear-gradient(45deg, #4d1d5e, #58077d);
+}
+
+.menu-cont .settings .settings-content > ul > li #theme3, .menu-cont .settings .report-content > ul > li #theme3 {
+  background: linear-gradient(45deg, #0f2026, #14FFEC);
 }
 
 .menu-cont .settings .settings-content > input[type="range"], .menu-cont .settings .report-content > input[type="range"] {

@@ -38,7 +38,7 @@ function setTimer(timer){
             // document.querySelector(".main-cont").style.opacity = "1";
             document.body.style.background = "var(--main-bg-color)"
         } else {
-            donePomodoro(1);
+            // donePomodoro(1);
             setsNum ++;
             saveSessionData();
             thisSessionTime = 0;
@@ -48,7 +48,7 @@ function setTimer(timer){
             // document.querySelector(".main-cont").style.opacity = "0.7";
             document.body.style.background = "var(--break-bg)";
             if (setsNum >= 3){
-                donePomodoro(0);
+                // donePomodoro(0);
                 setsNum = 0;
                 mainTimer = setInterval(setTimer, 1000, longBreakTimer);
                 // document.querySelector(".main-cont").style.opacity = "0.4";
@@ -96,6 +96,7 @@ function stopTimer(){
     pauseBt.addEventListener('click', playTimer);
     pauseBt.childNodes[0].src = "../images/timer-start-big.png";
 
+    document.querySelector(".buttons").style.marginLeft = "-45px";
 };
 function clearBreak(){
     clearInterval(mainTimer);
@@ -109,13 +110,13 @@ function clearBreak(){
 
 };
 
-function donePomodoro(set){
-    // let pomodoroIcons = document.querySelectorAll(".done-cont .pomodoro img");
-    // if (set == 1){
-    //     pomodoroIcons[setsNum].src = "../images/pomodoro-done.png";
-    // } else if (set == 0){
-    //     for (let icon of pomodoroIcons){
-    //         icon.src = "../images/pomodoro-unfinished.png";
-    //     }
-    // }
-}
+// function donePomodoro(set){
+//     // let pomodoroIcons = document.querySelectorAll(".done-cont .pomodoro img");
+//     // if (set == 1){
+//     //     pomodoroIcons[setsNum].src = "../images/pomodoro-done.png";
+//     // } else if (set == 0){
+//     //     for (let icon of pomodoroIcons){
+//     //         icon.src = "../images/pomodoro-unfinished.png";
+//     //     }
+//     // }
+// }

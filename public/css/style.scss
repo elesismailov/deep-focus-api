@@ -251,7 +251,8 @@ body{
                         border-radius: 50px;
                         margin-right: 10px;
                         &:checked{
-                            outline: 3px solid #0ff;
+                            // outline: 3px solid #0ff;
+                            box-shadow: 0 0 0 3px #0ff;
                         }
                         &:focus-visible {
                             outline: dashed 3px var(--focus-color);
@@ -262,6 +263,9 @@ body{
                     }
                     #theme2 {
                         background: linear-gradient(45deg, hsl(285, 53%, 24%), hsl(281, 89%, 26%));
+                    }
+                    #theme3 {
+                        background: linear-gradient(45deg, #0f2026, #14FFEC);
                     }
                 }
             }

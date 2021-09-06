@@ -169,26 +169,19 @@ function renderCanvas(reportData) {
     monthlyCanvas.width = monthlyCanvas.parentElement.parentElement.getClientRects()[0].width-52;
     reportCanvas.height = (reportCanvas.parentElement.getClientRects()[0].width-50)*3/4;
     monthlyCanvas.height = (monthlyCanvas.parentElement.getClientRects()[0].width-50)*3/4;
-    
+        
     let textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
     let strokeColor = getComputedStyle(document.body).getPropertyValue('--canvas-stroke');
     
-    document.querySelector("#total-focus-time").innerHTML = (''+reportData.timeReport.TotalFocusTime/60/60).slice(0,4) +'h';
+    document.querySelector("#total-focus-time").innerHTML = (''+reportData.timeReport.TotalFocusTime/60/60).slice(0,5) +'h';
     document.querySelector("#total-done-sets").innerHTML = reportData.timeReport.TotalDoneSets;
 
     let dateReport = reportData.dateReport;
-    dateReport.reverse()
-    let maxLinesWeek = dateReport.slice(-7).reduce( (a, arr) => arr.DoneSets > a ? arr.DoneSets : a, 0) + 1; // find maximum done pomodoros of the last 7 days
-    let maxLinesMonth = dateReport.reduce( (a, arr) => arr.DoneSets > a ? arr.DoneSets : a, 0) + 1; // find maximum done pomodoros of the last 30 days
-    dateReport.reverse()
 
     rContext.font = "13px Poppins";
     mContext.font = "13px Poppins";
     
     if (window.innerWidth < 500) {
-        // reportCanvas.style.width = (reportCanvas.parentElement.getClientRects()[0].width-50) + 'px';
-        // reportCanvas.style.height = (reportCanvas.parentElement.getClientRects()[0].width-50)/4*3 + 'px';
-        // reportCanvas.height = (reportCanvas.parentElement.getClientRects()[0].width-50)*3;
         reportCanvas.height = (reportCanvas.parentElement.getClientRects()[0].width-50)*3/4;
         monthlyCanvas.height = (monthlyCanvas.parentElement.getClientRects()[0].width-50)*3/4;
         
@@ -202,24 +195,73 @@ function renderCanvas(reportData) {
     mContext.lineWidth = 0.2;
     rContext.strokeStyle = strokeColor;
     mContext.strokeStyle = strokeColor;
-
+    
+    let filledDateReport = [];
+    filledDateReport.push(dateReport[0])
+    for (let i = 0; i < dateReport.length; i++) {
+        try {
+            if (dateReport[i].Date.slice(-2) - dateReport[i+1].Date.slice(-2) == 1) {
+                filledDateReport.push(dateReport[i+1])
+            } else {
+                let day = +dateReport[i].Date.slice(-2) -1;
+                let month = +dateReport[i].Date.slice(-5,-3);
+                let a = (30 - +dateReport[i+1].Date.slice(-2) + +dateReport[i].Date.slice(-2)) > 31 ? (30 - +dateReport[i+1].Date.slice(-2) + +dateReport[i].Date.slice(-2)) - 31: (30 - +dateReport[i+1].Date.slice(-2) + +dateReport[i].Date.slice(-2));
+                for ( let j = 0; j < a; j++) {
+                    if (day -j < 1) {
+                        month--;
+                        day = new Date(2019,+dateReport[i].Date.slice(-5,-3),0).getDate() + 3
+                    };
+                    filledDateReport.push({id: 0, Date: `${new Date().getFullYear()}-${('0'+month).slice(-2)}-${('0'+(day - j)).slice(-2)}`, TotalFocusTime: 0, DoneSets: 0})
+                }
+                filledDateReport.push(dateReport[i+1])
+            }
+        } catch (err) {
+            // console.err(err)
+        }
+    }
+    if (filledDateReport.length < 7) {
+        let day = +filledDateReport.slice(-1)[0].Date.slice(-2) -1;
+        let month = +filledDateReport.slice(-1)[0].Date.slice(-5,-3);
+        for ( let i = 0; i < 8; i++ ) {
+            if (day -i < 1) {
+                month--;
+                day = new Date(2019,+dateReport.slice(-1)[0].Date.slice(-5,-3),0).getDate() + 3
+            };
+            filledDateReport.push({id: 0, Date: `${new Date().getFullYear()}-${('0'+month).slice(-2)}-${('0'+(day - i)).slice(-2)}`, TotalFocusTime: 0, DoneSets: 0})
+        }filledDateReport
+    }
+    if (filledDateReport.length < 33) {
+        let day = +filledDateReport.slice(-1)[0].Date.slice(-2) -1;
+        let month = +filledDateReport.slice(-1)[0].Date.slice(-5,-3);
+        for ( let i = 0; i < 33; i++ ) {
+            if (day -i < 1) {
+                month--;
+                day = new Date(2019,+dateReport.slice(-1)[0].Date.slice(-5,-3),0).getDate() + 3
+            };
+            filledDateReport.push({id: 0, Date: `${new Date().getFullYear()}-${('0'+month).slice(-2)}-${('0'+(day - i)).slice(-2)}`, TotalFocusTime: 0, DoneSets: 0})
+        }
+    }
+    filledDateReport.reverse()
+    let maxLinesWeek = filledDateReport.slice(-7).reduce( (a, arr) => arr.DoneSets > a ? arr.DoneSets : a, 0) + 1; // find maximum done pomodoros of the last 7 days
+    let maxLinesMonth = filledDateReport.slice(-30).reduce( (a, arr) => arr.DoneSets > a ? arr.DoneSets : a, 0) + 1; // find maximum done pomodoros of the last 30 days
+    filledDateReport.reverse()
     rContext.beginPath()
     for (let i = 1; i < maxLinesWeek; i++) {
         rContext.moveTo(reportCanvas.width/8,reportCanvas.height/maxLinesWeek*i);
         rContext.lineTo(reportCanvas.width, reportCanvas.height/maxLinesWeek*i)
         rContext.fillText(maxLinesWeek-i, reportCanvas.width/8-20, reportCanvas.height/maxLinesWeek*i)
     }
-    dateReport.reverse()
+    filledDateReport.reverse()
     for (let j = 1; j < 8; j++) {
         rContext.moveTo(reportCanvas.width/8*j, reportCanvas.height)
         rContext.lineTo(reportCanvas.width/8*j, 0)
         try{
-            rContext.fillText(dateReport.slice(-7)[j-1].Date.slice(-2), (reportCanvas.width/8*j+5), reportCanvas.height-5)
+            rContext.fillText(filledDateReport.slice(-7)[j-1].Date.slice(-2), (reportCanvas.width/8*j+5), reportCanvas.height-5)
         } catch (err) {
             rContext.fillText('00', (reportCanvas.width/8*j+5), reportCanvas.height-5)
         }
     }
-    dateReport.reverse()
+    filledDateReport.reverse()
     rContext.stroke()
     rContext.closePath()
     mContext.beginPath()
@@ -232,7 +274,6 @@ function renderCanvas(reportData) {
     for (let i = 1; i < (maxLinesMonth+1); i++) {
         mContext.moveTo(monthlyCanvas.width/35*3,monthlyCanvas.height/(maxLinesMonth+1)*i);
         mContext.lineTo(monthlyCanvas.width, monthlyCanvas.height/(maxLinesMonth+1)*i)
-        // mContext.fillText(maxLinesMonth-i, reportCanvas.width/8-20, reportCanvas.height/maxLinesWeek*i)
     }
     mContext.stroke()
     mContext.closePath()
@@ -240,29 +281,24 @@ function renderCanvas(reportData) {
     rContext.beginPath()    ///////
     rContext.lineWidth = 1.5;
     rContext.strokeStyle = "#ff0000"
-    rContext.moveTo(reportCanvas.width/8, reportCanvas.height-1)
-    dateReport.reverse()
-    for (let i = 1; i < 8; i++) {
+    filledDateReport.reverse()
+    for (let i = 7; i >=1; i--) {
         try{
-            rContext.lineTo(reportCanvas.width/8*i, reportCanvas.height/maxLinesWeek*(maxLinesWeek - dateReport.slice(-7)[i-1].DoneSets)-1)
+            rContext.lineTo(reportCanvas.width/8*i, reportCanvas.height/maxLinesWeek*(maxLinesWeek - filledDateReport.slice(-7)[i-1].DoneSets)-1)
         } catch (err){
             rContext.lineTo(reportCanvas.width/8*i, reportCanvas.height-1)
         }
     }
-    dateReport.reverse()
+    filledDateReport.reverse()
     rContext.stroke()
     rContext.closePath()    ///////
-    
+
     mContext.beginPath()
     mContext.lineWidth = 1.5;
     mContext.strokeStyle = "#ff0000"
-    for (let j = 1; j < 35; j++) {
+    for (let j = 34; j >= 1; j--) {
         if (j > 2) {
-            if (34 - dateReport.length < j) {
-                mContext.lineTo(monthlyCanvas.width/35*j, monthlyCanvas.height/(maxLinesMonth)*(maxLinesMonth - dateReport[34-j].DoneSets)-1)
-            }else {
-                mContext.lineTo(monthlyCanvas.width/35*j, monthlyCanvas.height-2)
-            }
+            mContext.lineTo(monthlyCanvas.width/35*j, monthlyCanvas.height/(maxLinesMonth)*(maxLinesMonth - filledDateReport[34-j].DoneSets)-1)
         }
     }
     mContext.stroke()

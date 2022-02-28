@@ -1,9 +1,10 @@
 
 
 const express = require('express');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+const mongoose = require('mongoose');
 
 const app = express();
-
 
 app.get('/', function(req, res) {
 	res.send('helluwwuwuwu');

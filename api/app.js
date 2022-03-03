@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const initializeMongo = require('./mongoConfig');
 
@@ -55,7 +56,13 @@ app.post('/sign-up', async function(req, res) {
 	if (user) {
 		const u = await user.save();
 		if (u) {
-			res.sendStatus(201);
+			// create jwt token
+			const token = jwt.sign(
+				{ email, username: user.username, id: user._id },
+				process.env.JWT_KEY,
+				// { exp: 60 *60 *24 * 7, aud: 'web' }
+			);
+			res.status(201).send({ token });
 			return
 		}
 	}
@@ -78,7 +85,13 @@ app.post('/log-in', async function(req, res) {
 
 	// authenticate the user
 	if (await bcrypt.compare(password, user.password)) {
-		res.send(user);
+		// create jwt token
+		const token = jwt.sign(
+			{ email, username: user.username, id: user._id },
+			process.env.JWT_KEY,
+			// { exp: 60 *60 *24 * 7, aud: 'web' }
+		);
+		res.send({ token });
 		return
 	}
 	res.sendStatus(400)

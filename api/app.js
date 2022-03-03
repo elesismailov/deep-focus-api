@@ -12,6 +12,8 @@ const app = express();
 
 const User = require('./models/user');
 
+const authenticate = require('./middleware/auth');
+
 initializeMongo()
 
 app.use(bodyParser.json());
@@ -89,13 +91,23 @@ app.post('/log-in', async function(req, res) {
 		const token = jwt.sign(
 			{ email, username: user.username, id: user._id },
 			process.env.JWT_KEY,
-			// { exp: 60 *60 *24 * 7, aud: 'web' }
+			{
+				// expiresIn: 60 *60 *24 * 7,
+				expiresIn: 1,
+				audience: 'web'
+			}
 		);
 		res.send({ token });
 		return
 	}
 	res.sendStatus(400)
 });
+
+
+
+app.get('/protected', authenticate, function(req, res) {
+	res.send('got to the protected route')
+})
 
 
 const PORT = process.env.PORT || 3000

@@ -4,19 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"dev": "NODE_ENV='development' nodemon ./app.js",
-	"devDebug": "MONGOMS_DEBUG=1 NODE_ENV='development' nodemon ./app.js",
-	"start": "node ./app.js"
+    "dev": "NODE_ENV='development' nodemon ./app.js",
+    "devDebug": "MONGOMS_DEBUG=1 NODE_ENV='development' nodemon ./app.js",
+    "start": "node ./app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-	  "express": "^4.17.2",
-	  "mongoose": "^6.2.1"
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.2",
+    "express": "^4.17.2",
+    "mongoose": "^6.2.1"
   },
   "devDependencies": {
-	  "dotenv": "^16.0.0",
-	  "nodemon": "^2.0.15"
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15"
   }
 }

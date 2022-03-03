@@ -28,11 +28,11 @@ app.post('/sign-up', async function(req, res) {
 	}
 
 	// check whether user already exists
-	//const exists = await User.findOne({ email });
-	//if (exists) {
-	//	res.status(400).send('User already exists');
-	//	return
-	//}
+	const exists = await User.findOne({ email });
+	if (exists) {
+		res.status(400).send('User already exists');
+		return
+	}
 
 	// hash the password
 	let hash;
@@ -60,6 +60,28 @@ app.post('/sign-up', async function(req, res) {
 		}
 	}
 	res.sendStatus(500)
+});
+
+app.post('/log-in', async function(req, res) {
+	const { email, password } = req.body;
+	if ( !(email && password)) {
+		res.sendStatus(400);
+		return 
+	}
+
+	// check whether user already exists
+	const user = await User.findOne({ email });
+	if (!user) {
+		res.status(404).send('User does not exist');
+		return
+	}
+
+	// authenticate the user
+	if (await bcrypt.compare(password, user.password)) {
+		res.send(user);
+		return
+	}
+	res.sendStatus(400)
 });
 
 

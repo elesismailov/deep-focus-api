@@ -29,6 +29,7 @@ function authenticate(req, res, next) {
 				res.status(404).send('User does not exist');
 				return
 			}
+			req.currentUser = user;
 			next()
 		})
 	});

@@ -7,7 +7,7 @@ router.get('/', function(req, res) {
 	res.send(req.currentUser)
 });
 
-
+// create new entry 
 router.post('/', function(req, res) {
 
 	const user = req.currentUser;
@@ -36,6 +36,35 @@ router.post('/', function(req, res) {
 			return
 		}
 		res.sendStatus(201);
+	});
+});
+
+// finish the last entry
+router.put('/', function(req, res) {
+
+	const user = req.currentUser;
+	if (!user.isRecording) {
+		res.status(400).send('Currently is not recording');
+		return
+	}
+
+	const { elapsedTime }  = req.body;
+
+	const lastEntry = user.entries.slice(-1)[0];
+
+	lastEntry.elapsedTime = elapsedTime;
+	lastEntry.hasFinished = true;
+
+	user.entries.splice(-1, 1, lastEntry);
+
+	user.isRecording = false;
+
+	user.save( err => {
+		if (err) {
+			res.status(500).send("Could not create an entry");
+			return
+		}
+		res.sendStatus(202);
 	});
 });
 

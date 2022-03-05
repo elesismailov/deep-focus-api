@@ -10,9 +10,14 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
 
+	const user = req.currentUser;
+	if (user.isRecording) {
+		res.status(400).send('Already recording');
+		return
+	}
+
 	const { startTime } = req.body; // 1646386140569
 
-	const user = req.currentUser;
 	const lastEntry = user.entries.slice(-1)[0];
 
 	const entry = {
@@ -23,6 +28,7 @@ router.post('/', function(req, res) {
 	entry.id = lastEntry ? lastEntry.id+1 : 0;
 
 	user.entries.push(entry);
+	user.isRecording = true;
 
 	user.save( err => {
 		if (err) {

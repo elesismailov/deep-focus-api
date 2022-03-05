@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const initializeMongo = require('./mongoConfig');
 
 const app = express();
+const entriesRouter = require('./routers/entries');
 
 const User = require('./models/user');
 
@@ -17,6 +18,8 @@ const authenticate = require('./middleware/auth');
 initializeMongo()
 
 app.use(bodyParser.json());
+
+app.use('/entries', authenticate, entriesRouter);
 
 
 app.post('/sign-up', async function(req, res) {
@@ -98,35 +101,6 @@ app.post('/log-in', async function(req, res) {
 		return
 	}
 	res.sendStatus(400)
-});
-
-
-app.get('/protected', authenticate, function(req, res) {
-	res.send('got to the protected route')
-});
-
-app.post('/create-entry', authenticate, function(req, res) {
-	const { startTime } = req.body; // 1646386140569
-
-	const user = req.currentUser;
-	const lastEntry = user.entries.slice(-1)[0];
-
-	const entry = {
-		startTime,
-		elapsedTime: 0,
-		hasFinished: false,
-	};
-	entry.id = lastEntry ? lastEntry.id+1 : 0;
-
-	user.entries.push(entry);
-
-	user.save( err => {
-		if (err) {
-			res.status(500).send("Could not create an entry");
-			return
-		}
-		res.sendStatus(201);
-	});
 });
 
 

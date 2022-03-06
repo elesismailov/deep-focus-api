@@ -14,7 +14,6 @@ function App() {
 					<LogIn />
 				</Route>
 			</Switch>
-			<p> hello world! </p>
 		</Router>
 	);
 }

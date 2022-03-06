@@ -60,7 +60,8 @@ app.post('/sign-up', async function(req, res) {
 	const user = new User({
 		email,
 		username,
-		password: hash
+		password: hash,
+		isRecording: false,
 	});
 	
 	// save new user

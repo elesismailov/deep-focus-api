@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const initializeMongo = require('./mongoConfig');
 
@@ -18,6 +19,14 @@ const authenticate = require('./middleware/auth');
 initializeMongo()
 
 app.use(bodyParser.json());
+app.use(cors({
+	origin: ['http://localhost:3001']
+}));
+
+app.use(function(req, res, next) {
+	// res.set("Access-Control-Allow-Origin", "localhost:3001");
+	console.log(req.path); next()
+});
 
 app.use('/entries', authenticate, entriesRouter);
 

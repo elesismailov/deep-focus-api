@@ -4,7 +4,9 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', function(req, res) {
-	res.send(req.currentUser)
+	const user = req.currentUser;
+
+	res.send(user.entries.slice(-7));
 });
 
 // create new entry 

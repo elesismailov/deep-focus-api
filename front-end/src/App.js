@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './components/Header';
 import LogIn from './components/LogIn';
 import SignUp from './components/SignUp';
+import Timer from './components/Timer';
 
 function App() {
 
@@ -16,6 +17,9 @@ function App() {
 				</Route>
 				<Route path='/sign-up'>
 					<SignUp />
+				</Route>
+				<Route path='/'>
+					<Timer />
 				</Route>
 			</Switch>
 		</Router>

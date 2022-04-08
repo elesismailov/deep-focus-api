@@ -1,2 +1,4 @@
 
-An App to help you get things done.
+# Deep Focus App
+
+I just couldn't find a good pomodoro timer that can track time and sync across devices.

@@ -2,6 +2,7 @@
 def connectMongoDb():
 	from mongoengine import connect 
 	from os import environ
+	from models.user import User
 
 	mongoUri = environ.get('MONGODB_URI')
 	mongoDb = environ.get('MONGODB_DB')
@@ -17,4 +18,4 @@ def connectMongoDb():
 
 	# add db models here
 
-	print('Db connection established...')
+	print('MongoDB connection established...')

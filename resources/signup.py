@@ -18,10 +18,11 @@ class SignUp(Resource):
         parser.add_argument(name='password', required=True)
         args = parser.parse_args()
 
+        # new user
         user = User(
-            username=args.username,
-            email=args.email,
-            password=bcrypt(args.password)
+            username=args['username'],
+            email=args['email'],
+            password=bcrypt(args['password'])
         )
         user.save()
 

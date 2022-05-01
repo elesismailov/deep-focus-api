@@ -1,6 +1,6 @@
 from mongoengine import *
 
-class User(Document):
+class Users(Document):
 	username = StringField(max_length=20, required=True)
 	email = StringField(required=True, unique=True)
 	password = StringField(required=True)

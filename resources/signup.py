@@ -1,7 +1,7 @@
 
 
 from flask_restful import Resource, reqparse
-from models.user import User
+from models.user import Users
 from helpers.jwt import createJWT
 
 def bcrypt(p):
@@ -19,7 +19,7 @@ class SignUp(Resource):
         args = parser.parse_args()
 
         # new user
-        user = User(
+        user = Users(
             username=args['username'],
             email=args['email'],
             password=bcrypt(args['password'])

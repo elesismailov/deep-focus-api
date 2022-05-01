@@ -1,5 +1,10 @@
 
+import jwt
+import os
 
 def createJWT(username, email):
 
-	return None
+
+	token = jwt.encode({'username': username, 'email': email}, os.environ.get('SECRET'))
+
+	return token

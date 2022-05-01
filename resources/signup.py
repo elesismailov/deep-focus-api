@@ -23,6 +23,6 @@ class SignUp(Resource):
             email=args.email,
             password=bcrypt(args.password)
         )
-        # user.save()
+        user.save()
 
         return {'token': createJWT(username=user.username, email=user.email)}

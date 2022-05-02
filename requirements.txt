@@ -1,4 +1,6 @@
 aniso8601==9.0.1
+bcrypt==3.2.2
+cffi==1.15.0
 click==8.1.2
 dnspython==2.2.1
 Flask==2.1.1
@@ -8,6 +10,8 @@ itsdangerous==2.1.2
 Jinja2==3.1.1
 MarkupSafe==2.1.1
 mongoengine==0.24.1
+pycparser==2.21
+PyJWT==2.3.0
 pymongo==4.1.1
 pytz==2022.1
 six==1.16.0

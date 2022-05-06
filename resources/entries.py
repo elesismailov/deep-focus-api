@@ -10,11 +10,15 @@ class Entries(Resource):
         return {'message': 'this is a entries route!'}
 
     # create new entry
-    def post(self):
-        print('post entries')
+    # the kwargs are set from the auth decorator, so we can access them here
+    def post(self, **kwargs):
+        user = kwargs['user']
 
-        json = request.get_json(force=True)
+        req_json = request.get_json(force=True)
 
-        print(json)
-
-        return {'hello': 'there'}
+        user.entries.append([
+            req_json['startTime'],
+            req_json['endTime']
+        ])
+        print(user.entries)
+        user.save()

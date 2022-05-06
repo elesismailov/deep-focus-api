@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_restful import Resource, Api
+from flask_cors import CORS
+
 from config.mongodb import connectMongoDb
 
 from resources.login import LogIn
@@ -8,6 +10,7 @@ from resources.entries import Entries
 from resources.entry import Entry
 
 app = Flask(__name__)
+cors = CORS(app,  origins=['http://localhost:3000', '']) 
 api = Api(app)
 
 connectMongoDb()

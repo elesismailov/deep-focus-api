@@ -20,5 +20,4 @@ class Entries(Resource):
             req_json['startTime'],
             req_json['endTime']
         ])
-        print(user.entries)
         user.save()

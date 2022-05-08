@@ -1,4 +1,5 @@
 
+from flask import abort
 from flask_restful import Resource, reqparse
 from models.user import Users
 from helpers.jwt import createJWT
@@ -17,10 +18,10 @@ class LogIn(Resource):
         try:
             user = Users.objects(email=args['email'])[0]
         except:
-            return 
+            abort(400)
 
         if bcrypt.checkpw(args['password'].encode(), user.password.encode()):
             # signed in
             return {'token': createJWT(username=user.username, email=user.email)}
 
-        return 
+        abort(400)
